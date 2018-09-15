@@ -1,0 +1,11 @@
+{
+  "name": "proj-drawer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:orzocogorzo/proj-drawer.git",
+  "author": "Lucas García <lucas@bestiario.org>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
