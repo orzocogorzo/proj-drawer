@@ -13,12 +13,15 @@ export const DOMHandler = (function() {
         init() {
             const canvas = document.createElement("canvas");
             canvas.id = "canvas";
+            canvas.setAttribute("width","750");
+            canvas.setAttribute("height","500");
             this.el = canvas;
+            this.ctx = canvas.getContext("2d");
 
             let appContent = document.getElementById("content");
             appContent.appendChild(canvas);
 
-            domain = this.el.getClientRects();
+            domain = this.el.getClientRects()[0];
             
             return this;
         };
