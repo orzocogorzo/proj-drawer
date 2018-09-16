@@ -30,22 +30,15 @@ export const GeoSizer = (function() {
 
         dump(geojson) {
             let edges = new Object();
-
-            switch (geojson) {
-                case geojson.type === "FeatureCollection":
-                    geojson.features.map(f => {
-                        f.geometry.coordinates.map(coord => _iterTillCoord(coord,(input) => _cross(input,edges)));
-                    });
-                    break;
-                case geojson.type === "Feature":
-                    geojson.geometry.coordinates.map(coord => _iterTillCoord(coord,(input) => _cross(input,edges)));
-                    break;
-            };
+            
+            geojson.features.map(f => {
+                f.geometry.coordinates.map(coord => _iterTillCoord(coord,(input) => _cross(input,edges)));
+            });
 
             this.computeRanges(edges);
             this.computeSize(edges);
 
-            return edges;
+            return Object.freeze(edges);
         };
 
         computeRanges(edges) {
