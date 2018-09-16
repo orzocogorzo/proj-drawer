@@ -1,6 +1,6 @@
 import { GeoSizer } from './GeoSizer.js';
 import { GeoDrawer } from './GeoDrawer.js';
-import { DOMHandler } from './DomHandler.js';
+import { GeoCanvas } from './GeoCanvas.js';
 import { GeoScaler } from './GeoScaler.js';
 
 export const GeoAPI = (function() {
@@ -36,7 +36,7 @@ export const GeoAPI = (function() {
     class GeoAPI {
         constructor() {
             this.sizer = new GeoSizer(this).init();
-            this.dom = new DOMHandler(this).init();
+            this.dom = new GeoCanvas(this).init();
             this.drawer = new GeoDrawer(this).init(this.dom);
             this.scaler = new GeoScaler(this).init();
         };
