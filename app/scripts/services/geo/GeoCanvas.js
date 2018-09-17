@@ -17,13 +17,12 @@ export const GeoCanvas = (function() {
             canvas.setAttribute("height","500");
             this.el = canvas;
             this.ctx = canvas.getContext("2d");
-
-            let appContent = document.getElementById("content");
-            appContent.appendChild(canvas);
-
-            domain = this.el.getClientRects()[0];
-            
             return this;
+        };
+
+        attach(el) {
+            el.appendChild(this.el);
+            domain = this.el.getClientRects()[0];
         };
 
         size() {

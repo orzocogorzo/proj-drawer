@@ -41,6 +41,10 @@ export const GeoAPI = (function() {
             this.scaler = new GeoScaler(this).init();
         };
 
+        attachCanvas(el) {
+            this.dom.attach(el);
+        };
+
         import(geojson) {
             this.source_data = _storeGeoJson(geojson);
             this.range = this.sizer.dump(geojson);
@@ -49,8 +53,8 @@ export const GeoAPI = (function() {
             return this;
         };
 
-        draw() {
-            this.drawer.draw();
+        draw(el) {
+            this.drawer.draw(el);
         }
     }
 

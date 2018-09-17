@@ -37,6 +37,20 @@ export const BaseView = (function() {
         }
 
         typeof _ready == "function" && _ready();
+    };
+
+    function _styleEncapsulator(styleText,id){
+        return `<style id="${id}">${styleText.replace(/\s/g,'')}</style>`
+    };
+
+    function _htmlParser(templateStr) {
+        let htmlParser = document.createElement("template");
+        htmlParser.innerHTML = templateStr;
+        return htmlParser.content;
+    };
+
+    function _idGen() {
+        return Array.apply(null,Array(15)).map(_ => "-abcdefghijklmnopqrstvwxyxABCDEFGHIJKLMNOPQRSTVWXYZ1234567890_"[Math.floor(Math.random()*62)]).join("");
     }
 
     let _id, _content, _ready;
@@ -60,10 +74,10 @@ export const BaseView = (function() {
             new Dispatcher(this);
             new LifeCycle(this);
 
-            _id = Array.apply(null,Array(15)).map(_ => "abcdefghijklmnopqrstvwxyx1234567890_-!¡?¿><()$%&/"[Math.floor(Math.random()*49)]).join("");
+            _id = _idGen();
             this.id = config.id || _id;
             this.template = config.template;
-            this.style = config.style;
+            this.style = _styleEncapsulator(config.style,_id);
             this.data = new Reactive(config.data || new Object(), this.render);
         };
 
@@ -73,6 +87,7 @@ export const BaseView = (function() {
 
         render() {
             let templateString;
+
             if (typeof this.template == "string") {
                 templateString = this.template;
             } else if (typeof this.template == "function") {
@@ -80,9 +95,12 @@ export const BaseView = (function() {
             } else {
                 throw new Error("Unrecognized template format");
             };
-    
-            this.el.innerHTML = templateString;
-            _content = Array.apply(null,this.el.childNodes).map(node => node.cloneNode());
+
+            document.head.appendChild(
+                _htmlParser(this.style)
+            );
+            this.el.appendChild(_htmlParser(templateString));
+            // this.el.attachShadow({mode:'open'}).appendChild(_htmlParser(this.style+templateString));
             this.rendered = true;
 
             return this; 
@@ -90,6 +108,7 @@ export const BaseView = (function() {
 
         dettach() {
             this.el.innerHTML = "";
+            document.head.removeChild(document.getElementById(_id));
             return this;
         }
 
@@ -103,8 +122,7 @@ export const BaseView = (function() {
 
         addChild(Child,config) {
             config.home = this;
-            config._id = Array.apply(null,Array(15)).map(_ => "abcdefghijklmnopqrstvwxyx1234567890_-!¡?¿><()$%&/"[Math.floor(Math.random()*49)]).join("");
-            config.id = config.id || config._id;
+            config.id = config.id;
             let child = new Child(config);
             _childs[config._id] = child;
             return child;
