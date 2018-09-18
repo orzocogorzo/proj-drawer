@@ -1,13 +1,12 @@
-import { WebAPI } from './scripts/services/WebApi.js';
+import Vuebone from '../vendor/vuebone.js/index.js';
 import { GeoAPI } from './scripts/services/geo/GeoAPI.js';
-import { AppView } from './scripts/AppView.js';
-
 
 const source_name = "static/json/spain.geojson";
+window.Vuebone = Vuebone;
 
-const webApi = new WebAPI();
+const webApi = new Vuebone.WebApi();
 const geoAPI = new GeoAPI();
-const appView = new AppView({
+const appView = new Vuebone.App({
 	el: '#content',
 	template: '<div id="app">APP VIEW</div>',
 	style: `#app {
@@ -16,13 +15,16 @@ const appView = new AppView({
 				justify-content: center;
 				align-items: center;
 			}`,
-	data: {}
+  data: {}
 });
 
-appView.ready(function() {
+appView.setRouter({
+  "": (context,params) => {
+    console.log(context);
+  }
+}).start(function(app) {
 	webApi.get(source_name).done(function(response) {
 		geoAPI.import(response).draw();	
 	});
-	appView.render();
 	geoAPI.attachCanvas(appView.el.firstChild);
 });
